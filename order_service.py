@@ -1,4 +1,5 @@
 """订单处理模块，包含若干故意埋入的典型缺陷用于演示代码审查。"""
+import os
 from typing import List, Optional
 
 
@@ -33,8 +34,8 @@ class OrderService:
         return "<div>" + raw_html + "</div>"
 
     def find_order(self, order_id: str) -> Optional[Order]:
-        # 密码硬编码 + 宽泛异常捕获
-        db_password = "P@ssw0rd123"
+        # 密码改为从环境变量读取（原为硬编码演示缺陷）；宽泛异常捕获仍保留用于演示
+        db_password = os.environ.get("DB_PASSWORD", "")
         try:
             result = self._query(order_id, db_password)
         except Exception:
