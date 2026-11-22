@@ -17,9 +17,16 @@ class OrderService:
         return total
 
     def apply_discount(self, total: float, code: str) -> float:
-        # 未处理的除零 + 魔法数字
+        # 未处理的除零 + 魔法数字 + 空字符串时 len=0 直接崩溃
         discount = 100 / len(code)
         return total * (1 - discount)
+
+    def process_bulk(self, orders: List[Order]) -> float:
+        # 新增: 循环里重复计算 + 未判空
+        result = 0.0
+        for o in orders:
+            result += self.calculate_total(o)
+        return result
 
     def format_receipt(self, user_name: str, raw_html: str) -> str:
         # 潜在 XSS：直接把用户输入拼进 HTML
